@@ -1,9 +1,9 @@
 import socket
 import time
 import threading
-
+# import guitest
+global buff =[]
 mySocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-
 
 mySocket.connect(('localhost',5550))
 mySocket.send(b'new')
@@ -38,9 +38,12 @@ def myRecv():
     while True:
         try:
             getMassage = mySocket.recv(1024).decode()
+            buff.append(getMassage)
             print(getMassage)
+            # return getMassage
         except:
             print("fail to recv")
+
 
 check()
 
@@ -51,4 +54,4 @@ threads = [th1, th2]
 for t in threads:
     t.setDaemon(True)
     t.start()
-t.join()
+# t.join()

@@ -13,12 +13,14 @@ def broadcast(myName,content):
     for sockName in socket_dic.keys():
         if sockName != myName:
             try:
-                socket_dic[sockName].sendall(whatToSay.encode())
+                txt = myName + ' ' +content
+                socket_dic[sockName].sendall(txt.encode())
+                print(txt.encode())
             except:
                 pass
 
 def init(mySocket):
-    global userName
+    # global userName
     while True:
         userName = mySocket.recv(1024).decode()
         if userName in socket_dic:
@@ -29,10 +31,11 @@ def init(mySocket):
             # print("break")
             break
     socket_dic[userName] = mySocket
+    return userName
 
 def addThreadIn(mySocket):
     
-    init(mySocket)
+    userName = init(mySocket)
 
     print(userName+"jion")
     broadcast(userName,userName+'join')
@@ -40,9 +43,8 @@ def addThreadIn(mySocket):
         try:
             massage = mySocket.recv(1024).decode()
             if massage:
-                
                 broadcast(userName,massage)
-                print(userName+"say"+massage)
+                print(userName+" say:"+massage)
         except:
             try:
                 socket_dic.remove(userName)
