@@ -5,7 +5,7 @@ socket_dic ={}
 
 mySocket =  socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
-mySocket.bind(("localhost",5550))
+mySocket.bind(("10.15.85.94",5550))
 mySocket.listen(5)
 
 
@@ -24,7 +24,7 @@ def init(mySocket):
     while True:
         userName = mySocket.recv(1024).decode()
         if userName in socket_dic:
-            mySocket.send(b'username exist')
+            mySocket.sendall(b'username exist')
             # print("username exist")
         else:
             mySocket.send(b'username accept')
@@ -54,6 +54,8 @@ def addThreadIn(mySocket):
             print("shuo hua")
             broadcast(userName,userName+'leaved')
             mySocket.close()
+            return
+
 while True:
     connection, addr = mySocket.accept()
     try:

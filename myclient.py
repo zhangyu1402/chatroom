@@ -5,10 +5,38 @@ import socket
 # import test_client
 
 
+# class login(tk.Frame):
+
+def login():
+    def loginsent():
+        mySocket.send(entry1.get().encode())
+        check = mySocket.recv(1024).decode()
+        if  check== 'username exist':
+            var2.set(check)
+        else:
+            login.destroy()
+            # var2.set(check+'false')
+    login = Tk();login.title("登陆")
+    # f0 = Frame(login)
+    f1 = Frame(login,width=500,height=300);f1.pack()
+    f2 = Frame(login);f2.pack()
+    f3 = Frame(login);f3.pack()
+    Label(f1,text="用户名").pack(side=LEFT)
+    var = StringVar()
+    entry1 = Entry(f1,textvariable=var)
+    entry1.pack(side=LEFT)
+    var2 = StringVar()
+    messagebox = Message(f3,text='请输入用户名',width=200,textvariable=var2)
+    messagebox.pack()
+    button = Button(f2, text='login', width = 8, command=loginsent)
+    button.pack()
+    login.mainloop()
+
+    
+
 
 mySocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-
-mySocket.connect(('localhost',5550))
+mySocket.connect(('10.15.85.94',5550))
 mySocket.send(b'new')
 print(mySocket.recv(1024).decode())
 
@@ -24,10 +52,8 @@ def check():
         check = mySocket.recv(1024).decode('utf-8')
         print(check)
         if check == 'username exist':
-            # print("1")
             pass
         else:
-            # print("success")
             break
 
 def mySent():
@@ -84,14 +110,18 @@ def mymain():
   t.title('聊天室')
         
   #创建frame容器
-  frmLT = Frame(width=500, height=320, bg='white')
+#   frmMain = Frame(width=500, height=320, bg='white')
+
+
+
+  frmLT = Frame(width=500, height=320, bg='green')
   frmLC = Frame(width=500, height=150, bg='white')
   frmLB = Frame(width=500, height=30)
   frmRT = Frame(width=200, height=500)
     
   #创建控件
   txtMsgList = Text(frmLT)
-  txtMsgList.tag_config('greencolor', foreground='#008C00')#创建tag
+  txtMsgList.tag_config('green', foreground='#008C00')#创建tag
   txtMsg = Text(frmLC)
   txtMsg.bind("<KeyPress-Up>", sendMsgEvent)
   btnSend = Button(frmLB, text='发 送', width = 8, command=sendMsg)
@@ -116,22 +146,18 @@ def mymain():
   lblImage.grid()
   txtMsgList.grid()
   txtMsg.grid()
+#   for t in [btnCancel,btnSend,lblImage,txtMsgList,txtMsg]:
+#       t.pack(side=LEFT)
   t.after(1000,refresh)
-
+  
   #主事件循环
   t.mainloop()
 
-check()
-th1 = threading.Thread(target=mySent)
-th2 = threading.Thread(target=myRecv)
-# th3 = threading.Thread(target=mymain)
-threads = [th1, th2]
 
-for t in threads:
-  print("ready")
-  t.setDaemon(True)
-  t.start()
-# t.join()
+login()
+th2 = threading.Thread(target=myRecv)
+th2.setDaemon(True)
+th2.start()
 mymain()
 
 
